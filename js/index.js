@@ -3,7 +3,6 @@
 
 function onTimerChange(event) {
   
-  console.log(event.target.value);
 
   var raw = event.target.value;
   var subjectID = event.target.parentNode.parentNode.getAttribute("subject-id");
@@ -139,11 +138,8 @@ var lastActiveLegends;
 // });
 
 document.addEventListener("click", function(ev) {
-  console.log("Last Active Legends is null:", lastActiveLegends == null);
   var currentLegends = getClosestParent(ev.target, '.timer-legends');
-  console.log("Current Legends is null: ", currentLegends == null);
   var timerDuration = getClosestParent(ev.target, '#timer-duration');
-  console.log("Timer Duration is null: ", timerDuration == null);
 
 
   if (currentLegends != null) {
@@ -210,13 +206,12 @@ Number.prototype.clamp = function(min, max) {
 addEventListenerToClassName("change", "input-time", onTimerChange);
 
 function targetPPToggleEdit(event) {
-  // console.log("targetPPToggleEdit");
+  
   event.target.parentNode.parentNode.classList.toggle('edit');
 }
 
 function targetPToggleEditElem(elem) {
-  console.log("targetPToggleEditElem");
-  // console.log(elem.parentNode);
+  
   elem.parentNode.classList.toggle('edit');
 }
 
@@ -225,8 +220,7 @@ function targetPPRemoveEdit(event) {
 }
 
 function targetPCloseEditElem(elem) {
-  console.log("targetPCloseEditElem");
-  // console.log(elem.parentNode.parentNode);
+  
   elem.parentNode.classList.remove('edit');
 }
 
@@ -311,7 +305,7 @@ function setProgress() {
     // if (finishedEditing)
 
     var levelLabel = el.parentNode.children[0].children[1];
-    // console.log(levelLabel);
+    
   
 
     var inputDuration = el.children[1].children[1];
@@ -417,7 +411,6 @@ setProgress();
 pushNewSubject();
 
 function addSubject(){
-  console.log(subjects.length);
   var newSubjectID = subjects.length;
   var html = '<div subject-id="'+newSubjectID+'" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex"> <input type="text" class="uk-flex-none uk-width-auto uk-input uk-card-title uk-text-bold" placeholder="Subject Name"> <div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-medium uk-text-bold"> Starts <input tabindex='+(newSubjectID+1)+' class="input input-time uk-width-auto uk-flex-none uk-input" type="text" placeholder="00:00"> </div></div><div subject-id="'+newSubjectID+'" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top"> <div class="level uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option selected>Standard Level</option> <option>Higher Level</option> </select> <div class="uk-text-left uk-input level-label">End</div></div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="60" value="60"> </div></div></div><div class="level uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option>Standard Level</option> <option selected>Higher Level</option> </select> <div class="uk-text-left uk-input level-label">End</div></div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="120" value="120"> </div></div></div></div>';
   document.getElementById("timer-container").insertAdjacentHTML('beforeend', html);
@@ -432,6 +425,18 @@ function addSubject(){
   // addEventListenerToClassName("blur", "input-duration", targetPPToggleEdit);
   
   pushNewSubject();
+}
+
+var currentZoomPercent = 100;
+
+function zoomIn() {
+  currentZoomPercent += 10;
+  document.body.style.setProperty('zoom', currentZoomPercent + '%');
+}
+
+function zoomOut() {
+  currentZoomPercent -= 10;
+  document.body.style.setProperty('zoom', currentZoomPercent + '%');
 }
 
 // function cssWidthMinusPx(el, px) {
