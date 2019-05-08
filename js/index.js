@@ -428,15 +428,31 @@ function addSubject(){
 }
 
 var currentZoomPercent = 100;
+var zoomPopUpTimeOut;
 
 function zoomIn() {
   currentZoomPercent += 10;
-  document.body.style.setProperty('zoom', currentZoomPercent + '%');
+  document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
+  zoomPopup();
 }
 
 function zoomOut() {
   currentZoomPercent -= 10;
-  document.body.style.setProperty('zoom', currentZoomPercent + '%');
+  document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
+  zoomPopup();
+}
+
+function zoomPopup() {
+  document.getElementById("zoom-pop-up").innerHTML = "Zoom: " + currentZoomPercent + "%";
+  document.getElementById("zoom-pop-up").classList.remove('uk-invisible');
+  // document.getElementById("zoom-pop-up").classList.add('uk-animation-fade');
+
+  clearTimeout(zoomPopUpTimeOut);
+
+  zoomPopUpTimeOut = setTimeout(function(){
+    document.getElementById("zoom-pop-up").classList.add('uk-invisible');
+    // document.getElementById("zoom-pop-up").classList.remove('uk-animation-fade');
+  }, 300)
 }
 
 // function cssWidthMinusPx(el, px) {

@@ -15,7 +15,7 @@
 </head>
 <body>
 
-  <div class="num-mono uk-container uk-container-expand uk-height-viewport uk-background-muted uk-flex uk-flex-column uk-padding-small">
+  <div id="main" class="num-mono uk-container uk-container-expand uk-height-viewport uk-background-muted uk-flex uk-flex-column uk-padding-small">
     <div id="main-timer" class="num-mono uk-flex-none uk-card uk-card-xsmall uk-card-default uk-card-body uk-flex uk-flex-baseline uk-flex-center">
       <div class="uk-text-large uk-text-bold">
         <span id="main-timer-hour"></span> : <span id="main-timer-min"></span>
@@ -83,6 +83,8 @@
 
     </div>
   </div>
+  
+  <div id="zoom-pop-up" class=" uk-overlay uk-overlay-default uk-position-center uk-invisible">Zoom:</div>
 
   <div class="btn-group uk-flex uk-flex-middle uk-padding-small uk-overlay uk-position-bottom-right uk-width-auto uk-card uk-card-hover">
     <button id="btn-zoom-out" uk-icon="minus-circle" class="btn" onclick="zoomOut();"></button>
