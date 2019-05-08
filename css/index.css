@@ -150,6 +150,10 @@ button {
   /*-moz-osx-font-smoothing: grayscale;*/
 }
 
+.levels-card {
+  margin-left: 20px;
+}
+
 .icon-arrow_back:before {
   content: "\e5c4";
 }
