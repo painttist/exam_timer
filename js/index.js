@@ -251,6 +251,9 @@ function toggleFullScreen() {
     } else if (document.msExitFullscreen) { /* IE/Edge */
       document.msExitFullscreen();
     }
+
+    resetZoom();
+
   } else {
     var body = document.body;
 
@@ -263,6 +266,8 @@ function toggleFullScreen() {
     } else if (body.msRequestFullscreen) { /* IE/Edge */
       body.msRequestFullscreen();
     }
+
+    zoomIn();
   } 
 
   isFullScreen = !isFullScreen;
@@ -440,6 +445,11 @@ function zoomOut() {
   currentZoomPercent -= 10;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
   zoomPopup();
+}
+
+function resetZoom() {
+  currentZoomPercent = 100;
+  document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
 }
 
 function zoomPopup() {
