@@ -15,8 +15,8 @@
 </head>
 <body>
 
-  <div class="uk-container uk-container-expand uk-height-viewport uk-background-muted uk-flex uk-flex-column uk-padding-small">
-    <div id="main-timer" class="num-mono uk-flex-none uk-card uk-card-small uk-card-default uk-card-body uk-flex uk-flex-baseline uk-flex-center">
+  <div class="num-mono uk-container uk-container-expand uk-height-viewport uk-background-muted uk-flex uk-flex-column uk-padding-small">
+    <div id="main-timer" class="num-mono uk-flex-none uk-card uk-card-xsmall uk-card-default uk-card-body uk-flex uk-flex-baseline uk-flex-center">
       <div class="uk-text-large uk-text-bold">
         <span id="main-timer-hour"></span> : <span id="main-timer-min"></span>
       </div>
@@ -24,32 +24,72 @@
       </div>
     </div>
 
-    <div class="timer-container uk-flex-none uk-flex uk-flex-column">
-      <!-- Timers In Here -->
-      <div class="timer uk-flex-auto uk-flex uk-card uk-card-body uk-card-small uk-card-default uk-margin-small-top">
+    <div id="timer-container" class="uk-flex-none uk-flex uk-flex-column">
+      <!-- Subjects and Timers In Here -->
+      <div subject-id="0" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex">
+        <input type="text" class="uk-flex-none uk-width-auto uk-input uk-card-title uk-text-bold" placeholder="Subject Name">
+        <div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-medium uk-text-bold">
+          Starts
+          <input tabindex=1 class="input input-time uk-width-auto uk-flex-none uk-input" type="text" placeholder="00:00">
+        </div>
+      </div>
 
-        <div class="uk-width-1-6 uk-flex-none uk-flex uk-flex-column uk-flex-stretch">
+      <div subject-id="0" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top">
+        <div class="level uk-flex-auto uk-flex uk-margin-small-bottom">
 
-          <div class="uk-width-expand uk-flex-1 uk-flex uk-flex-middle">
-            <input class="uk-input" type="text" placeholder="Subject">
+          <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column">
+            <!-- <input class="uk-input" type="text" placeholder="Higher / Standard"> -->
+            <select class="uk-input uk-text-bold level-label">
+                <option selected>Standard Level</option>
+                <option>Higher Level</option>
+            </select>
+            <div class="uk-text-left uk-input level-label">End</div>
           </div>
-
           
-          <div class="uk-flex-1 uk-flex uk-flex-middle">
-            <input tabindex=1 class="input-time uk-flex-none uk-input" type="text" placeholder="00:00">
+          <div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle">
+            <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text">
+              <div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div>
+            </div>
+            <div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline">
+              <div class="uk-flex-none">Duration (min):</div>
+              <input type="text" class="input-duration uk-flex-1 uk-input" placeholder="60" value="60">
+            </div>
           </div>
         </div>
-        
-        <div class="uk-flex-1 uk-background-primary">Something</div>
-      </div>
 
-      <div class="exam uk-flex-auto uk-flex uk-card uk-card-body uk-card-small uk-card-default uk-margin-small-top">
-        <h3 class="uk-card-title"></h3>
-      </div>
+        <div class="level uk-flex-auto uk-flex uk-margin-small-bottom">
+
+          <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column">
+            <!-- <input class="uk-input" type="text" placeholder="Higher / Standard"> -->
+            <select class="uk-input uk-text-bold level-label">
+                <option>Standard Level</option>
+                <option selected>Higher Level</option>
+            </select>
+            <div class="uk-text-left uk-input level-label">End</div>
+          </div>
+          
+          <div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle">
+            <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text">
+              <div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div>
+            </div>
+            <div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline">
+              <div class="uk-flex-none">Duration (min):</div>
+              <input type="text" class="input-duration uk-flex-1 uk-input" placeholder="120" value="120">
+            </div>
+          </div>
+        </div>
+          
+        </div>
+
     </div>
-
   </div>
-  
+
+  <div class="btn-group uk-padding-small uk-overlay uk-position-bottom-right uk-width-auto uk-card uk-card-hover">
+    <button id="btn-plus" uk-icon="plus" class="btn" onclick="addSubject();"></button>
+    <button id="btn-fullscreen" uk-icon="expand" class="btn" onclick="toggleFullScreen();"></button>
+  </div>
+
+
   <!-- UIkit JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/js/uikit.min.js" integrity="sha256-JJgdoUCEwWBuvXW08W3EvBgfVEHoPt82Nje/+DXrDGs=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/js/uikit-icons.min.js" integrity="sha256-yALuSP2vwUtflUpSb0dMHDdCaNUfaHHpY6+TKCYDxes=" crossorigin="anonymous"></script>
