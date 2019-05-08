@@ -396,8 +396,8 @@ function setProgress() {
 
     var percent = minElapsed / duration * 100;
 
-    var primaryColor = "#eee"
-    var bgColor = "#aaa"
+    var primaryColor = "#ddd"
+    var bgColor = "#bbb"
     var shadowColor = "#999"
     timerLegends.style.backgroundImage = "linear-gradient(90deg, "
       +primaryColor+" 0%, "+primaryColor+" "+(percent-0.5)+"%, "
