@@ -1,5 +1,7 @@
 # Exam Timer
 
+See it [Live](https://painttist.com/ExamTimer/)
+
 This is an exam timer inspired by being an IB student, sitting through final exams and still messed up timing partly because the timer was not the clearest.
 
 It can be argued that students can just use their own watch, but I believe that through visualizing the time elapsed as well as putting information into hierarchies can greatly help students focus more on their exam while efficiently keeping track of their time.
