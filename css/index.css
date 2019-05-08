@@ -1,0 +1,39 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono&text=0123456789);
+
+.num-mono {
+  font-family: "Roboto Mono";
+}
+
+.uk-flex-baseline {
+  align-items: baseline !important;
+}
+
+.uk-input {
+  border: 0px;
+}
+
+.input-time-group {
+  padding: 0 10px;
+}
+
+.input-time {
+  height: 40px;
+  line-height: 40px;
+    vertical-align: middle;
+    display: inline-block;
+    border: 0px;
+}
+
+/*div > .show-on-hover {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  background: white;
+  transition: opacity 0.3s ease;
+}
+
+div:hover > .show-on-hover {
+  opacity: 1;
+}*/
