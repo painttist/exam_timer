@@ -17,6 +17,10 @@
   padding: 0 10px;
 }
 
+.uk-text-normal {
+  font-weight: normal;
+}
+
 .input-time {
   height: 40px;
   line-height: 40px;
@@ -27,7 +31,7 @@
 
 .level .level-label {
   line-height: 25px;
-  height: 25px;
+  height: 50px;
 }
 
 
@@ -36,7 +40,9 @@
 }
 
 .uk-text-medium {
-  /*font-size: 1.3rem;*/
+  font-size: 1.3rem;
+  /*line-height: 1.5;*/
+  /*height: 100%;*/
 }
 
 
@@ -57,19 +63,20 @@ button {
   opacity: 1;
 }
 
-.timer-legend {
-  font-family: 'icomoon', "Roboto Mono", "Roboto" !important;
+* {
+  color: #222 !important;
+}
+/*
+#main-timer {
+  color: #666666;
+}
 
-  display: inline-block;
-  border-left: 1px solid black;
-  padding-left: 5px;
-  height: 100%;
-  position: relative;
+.uk-card-default .uk-card-title {
+  color: #666666;
+}*/
 
-  /*line-height: 60px;*/
-  /*vertical-align: top;*/
-
-  cursor: pointer;
+.uk-card-xsmall.uk-card-body.subject, #main-timer{
+  padding: 5px;  
 }
 
 .timer {
@@ -87,6 +94,64 @@ button {
   transition: height 0.2s ease;
 }
 
+.timer-legend-end-small, .timer-legend {
+  font-size: 0.9rem;
+  font-weight: bold;
+  opacity: 0.75;
+}
+
+.timer-legend {
+  font-family: 'icomoon', "Roboto Mono", "Roboto" !important;
+
+  display: inline-block;
+  border-left: 1px solid black;
+  padding-left: 5px;
+  height: 100%;
+  position: relative;
+
+  /*line-height: 60px;*/
+  /*vertical-align: top;*/
+
+  cursor: pointer;
+}
+
+.timer-legend-end-large {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  font-size: 1.2rem;
+  font-weight: bolder;
+  
+  padding-left: 5px;
+  padding-top: 18px;
+}
+
+.timer-legend-time {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  font-size: 1.2rem;
+  font-weight: bolder;
+  
+  padding-left: 5px;
+  padding-top: 18px;
+}
+
+.timer-legend-end-time {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  font-size: 1.2rem;
+  font-weight: bolder;
+  
+  padding-left: 5px;
+  padding-top: 18px;
+}
+
+
 .timer-legend:before {
   font-family: 'icomoon', "Roboto Mono", "Roboto" !important;
 
@@ -95,17 +160,48 @@ button {
   top: 0;
   right: 0;
   padding-right: var(--tag-padding-right);
-  height: 100%;
+  /*height: 100%;*/
   width: 200px;
   text-align: right;
+
+  
 
   /*line-height: 60px;*/
   /*vertical-align: middle;*/
 }
 
+.timer-legend:after {
+  font-family: 'icomoon', "Roboto Mono", "Roboto" !important;
+
+  content: attr(data-after);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-right: var(--tag-padding-right);
+  /*height: 100%;*/
+  width: 200px;
+  
+  font-size: 1.2rem;
+  font-weight: bolder;
+
+  padding-top: 18px;
+  text-align: right;
+
+
+  /*line-height: 60px;*/
+  /*vertical-align: middle;*/
+}
+
+
 .level-label {
   font-weight: bolder;
-  color: #999;
+  color: #787878;
+  position: relative;
+}
+
+.level-label-end {
+  width: 50px;
+  padding: 0px 0px 0px 10px;
 }
 
 .level-label.uk-text-bold {
@@ -114,6 +210,7 @@ button {
 
 .timer-legends {
   height: 50px;
+  overflow: hidden;
 }
 
 .uk-input:not(input), .uk-select:not(select) {
@@ -131,6 +228,21 @@ button {
 
 .btn-group {
   padding: 2vh;
+  opacity: 0;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-group:hover {
+  opacity: 1;
+}
+
+.btn-subject-delete {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+.btn-subject-delete:hover {
+  opacity: 1;
 }
 
 .btn {
@@ -142,13 +254,17 @@ button {
   height: 3vh;
 }
 
+.gone {
+  display: none;
+}
+
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?y1vces');
-  src:  url('fonts/icomoon.eot?y1vces#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?y1vces') format('truetype'),
-    url('fonts/icomoon.woff?y1vces') format('woff'),
-    url('fonts/icomoon.svg?y1vces#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ujh2cx');
+  src:  url('fonts/icomoon.eot?ujh2cx#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ujh2cx') format('truetype'),
+    url('fonts/icomoon.woff?ujh2cx') format('woff'),
+    url('fonts/icomoon.svg?ujh2cx#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -168,14 +284,10 @@ button {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-arrow_back:before {
-  content: "\e5c4";
+.icon-arrow-left:before {
+  content: "\e900";
 }
-.icon-arrow_forward:before {
-  content: "\e5c8";
-}
-
-.gone {
-  display: none;
+.icon-arrow-right:before {
+  content: "\e901";
 }
 

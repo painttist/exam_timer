@@ -26,24 +26,25 @@
 
     <div id="timer-container" class="uk-flex-none uk-flex uk-flex-column">
       <!-- Subjects and Timers In Here -->
-      <div subject-id="0" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex">
-        <input type="text" class="uk-flex-none uk-width-auto uk-input uk-card-title uk-text-bold" placeholder="Subject Name">
-        <div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold">
-          Starts
-          <input tabindex=1 class="input input-time uk-width-auto uk-flex-none uk-input" type="text" placeholder="00:00">
+      <div id="subject-title-0" subject-id="0" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex">
+        <input type="text" class="uk-flex-none uk-width-medium uk-input uk-card-title uk-text-bold" placeholder="Subject Name">
+        <div class="uk-flex-none uk-width-auto uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold">
+          Start  <input tabindex=1 class="input input-time uk-text-normal uk-width-small uk-flex-none uk-input" type="text" placeholder="00:00">
         </div>
+        <div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold">
+          End     <span class="uk-text-normal">--:--</span>     <span class="uk-text-normal">--:--</span></div>
+        <button class="btn-subject-delete uk-flex-none uk-flex uk-flex-middle uk-padding-small uk-padding-remove-vertical" uk-icon="minus-circle" onclick="deleteSubject(this)"></button>
       </div>
 
-      <div subject-id="0" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top">
-        <div class="level uk-flex-auto uk-flex uk-margin-small-bottom">
+      <div id="subject-levels-0" subject-id="0" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top">
+        <div class="level uk-flex-middle uk-flex-auto uk-flex uk-margin-small-bottom">
 
-          <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column">
+          <div class="uk-text-medium uk-flex-none uk-width-auto uk-flex uk-flex-left uk-flex-column">
             <!-- <input class="uk-input" type="text" placeholder="Higher / Standard"> -->
             <select class="uk-input uk-text-bold level-label">
-                <option selected>Standard Level</option>
-                <option>Higher Level</option>
+                <option selected>SL</option>
+                <option>HL</option>
             </select>
-            <div class="uk-text-left uk-input level-label">End</div>
           </div>
           
           <div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle">
@@ -57,17 +58,23 @@
               <input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5">
             </div>
           </div>
+
+          <div class="uk-width-auto uk-flex-none uk-flex uk-flex-left">
+            <!-- <input class="uk-input" type="text" placeholder="Higher / Standard"> -->
+            <div class="uk-text-left level-label-end level-label">End</div>
+          </div>
+
+
         </div>
 
-        <div class="level uk-flex-auto uk-flex uk-margin-small-bottom">
+        <div class="level uk-flex-middle uk-flex-auto uk-flex">
 
-          <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column">
+          <div class="uk-text-medium uk-flex-none uk-width-auto uk-flex uk-flex-left uk-flex-column">
             <!-- <input class="uk-input" type="text" placeholder="Higher / Standard"> -->
             <select class="uk-input uk-text-bold level-label">
-                <option>Standard Level</option>
-                <option selected>Higher Level</option>
+                <option>SL</option>
+                <option selected>HL</option>
             </select>
-            <div class="uk-text-left uk-input level-label">End</div>
           </div>
           
           <div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle">
@@ -81,9 +88,14 @@
               <input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5">
             </div>
           </div>
+
+          <div class="uk-width-auto uk-flex-none uk-flex uk-flex-left">
+            <!-- <input class="uk-input" type="text" placeholder="Higher / Standard"> -->
+            <div class="uk-text-left level-label-end level-label">End</div>
+          </div>
+
         </div>
-          
-        </div>
+      </div>
 
     </div>
   </div>
@@ -91,8 +103,10 @@
   <div id="zoom-pop-up" class=" uk-overlay uk-overlay-default uk-position-center uk-invisible">Zoom:</div>
 
   <div class="btn-group uk-flex uk-flex-middle uk-padding-small uk-overlay uk-position-bottom-right uk-width-auto uk-card uk-card-hover">
-    <a id="btn-info" uk-icon="question" class="btn" uk-tooltip="Click On Timeline to <br> Edit Exam Duration" href="#"></a>
+    <input id="color-picker" type="color" class="gone" value="#9BE3C8">
+    <a id="btn-question" uk-icon="question" class="btn" uk-tooltip="Click On Timeline to <br> Edit Exam Duration" href="#"></a>
     <a id="btn-info" uk-icon="info" class="btn" uk-tooltip="By Painttist" href="https://github.com/painttist/exam_timer" target="_blank"></a>
+    <button id="btn-toggle-force12" uk-icon="clock" uk-tooltip="title: Force Hour ≤12; delay: 500" class="btn" onclick="toggleForce12();"></button>
     <button id="btn-zoom-out" uk-icon="minus-circle" uk-tooltip="title: Zoom Out; delay: 500" class="btn" onclick="zoomOut();"></button>
     <button id="btn-zoom-in" uk-icon="plus-circle" uk-tooltip="title: Zoom In; delay: 500" class="btn" onclick="zoomIn();"></button>
     <button id="btn-plus" uk-icon="pencil" uk-tooltip="title: Add Subject; delay: 500" class="btn" onclick="addSubject();"></button>
