@@ -566,17 +566,20 @@ function zoomIn() {
   currentZoomPercent += 10;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
   zoomPopup();
+  setProgress();
 }
 
 function zoomOut() {
   currentZoomPercent -= 10;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
   zoomPopup();
+  setProgress();
 }
 
 function resetZoom() {
   currentZoomPercent = 100;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
+  setProgress();
 }
 
 function zoomPopup() {
