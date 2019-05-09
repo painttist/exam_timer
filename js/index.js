@@ -350,7 +350,8 @@ function setProgress() {
       var shtxt = checkTime(sh);
       var smtxt = checkTime(sm);
       minElapsed = (currentHour - startHour[subjectID]) * 60 + currentMin - startMin[subjectID] + currentSec / 60;
-      
+
+      console.log("Min Elapsed", minElapsed);
 
       var hm = checkMin(sm + reading);
       var hr = parseInt(sh) + parseInt(hm.h, 10);
@@ -399,6 +400,7 @@ function setProgress() {
 
     // console.log(totalLegendWidth);
 
+    console.log(subjectID, "Reading", reading, "Duration", duration);
     var legendReadingWidth = ((reading) / duration) * totalLegendWidth;
 
     if (legendReadingWidth <= 0) {
@@ -411,7 +413,7 @@ function setProgress() {
     // console.log(legendReadingWidth);
     legendReading.style.width = legendReadingWidth - offset + "px";
 
-    var legendStartWidth = ((duration - 30) / duration) * totalLegendWidth;
+    var legendStartWidth = ((duration - 30 - reading) / duration) * totalLegendWidth;
 
     legendStart.style.width = legendStartWidth - offset + "px";
     // cssWidthMinusPx(legendStart, 12);
@@ -425,20 +427,23 @@ function setProgress() {
 
     legend30.style.setProperty("--tag-padding-right", (legend30Width + 5)+ "px");
 
-    var legend5Width = totalLegendWidth - legendStartWidth - legend30Width;
+    var legend5Width = totalLegendWidth - legendReadingWidth - legendStartWidth - legend30Width;
     legend5.style.width = legend5Width - offset + "px";
 
     legend5.style.setProperty("--tag-padding-right", (legend5Width + 5)+ "px");
 
     var percent = minElapsed / duration * 100;
 
+    console.log("Percent: ", percent);
+    console.log('duration', duration);
+
     var primaryColor = "#ddd"
     var bgColor = "#bbb"
     var shadowColor = "#999"
     timerLegends.style.backgroundImage = "linear-gradient(90deg, "
-      +primaryColor+" 0%, "+primaryColor+" "+(percent-0.5)+"%, "
-      +shadowColor+" "+(percent-0.5)+"%, "+bgColor+" "+percent+"%, "
-      +bgColor+" "+(percent)+"%, "+bgColor+" 100%)";
+      +primaryColor+" 0%, "+primaryColor+" "+(percent)+"%, "
+      +shadowColor+" "+(percent)+"%, "+bgColor+" "+(percent + 0.5)+"%, "
+      +bgColor+" "+(percent + 0.5)+"%, "+bgColor+" 100%)";
   });
 }
 
