@@ -101,7 +101,6 @@ button {
 
   /*line-height: 60px;*/
   /*vertical-align: middle;*/
-
 }
 
 .level-label {
@@ -174,5 +173,9 @@ button {
 }
 .icon-arrow_forward:before {
   content: "\e5c8";
+}
+
+.gone {
+  display: none;
 }
 
