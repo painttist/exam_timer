@@ -1,24 +1,43 @@
 'use strict'
 // alert("Hello World")
 
+console.log("Version 2.1");
+
 var force12 = true;
+var btnForce12 = document.getElementById('btn-toggle-force12');
+
+document.body.onresize = updateDisplayProgress;
+
+var showExtraInfo = false;
+
+function toggleExtraInfo() {
+  showExtraInfo = !showExtraInfo;
+
+  updateDisplayProgress();
+}
 
 function toggleForce12() {
   force12 = !force12;
+  btnForce12.innerHTML = force12 ? 24 : 12;
+
+  Array.from(document.getElementsByClassName('input-time')).forEach(function(el, index){
+
+    if (!el.value) return;
+    
+    var parsedHM = rawTimeToHM(el.value)
+    el.value = getDisplayTime(parsedHM.hour) +":" + getDisplayTime(parsedHM.min);
+
+    pushTimes(index, parsedHM.hour, parsedHM.min);
+  });
+
+  updateTime();
+
+  updateDisplayProgress();
 }
 
-function onTimerChange(event) {
-  
-
-  var raw = event.target.value;
-  var subjectID = event.target.parentNode.parentNode.getAttribute("subject-id");
-
-  if (!raw) {
-    pushTimes(subjectID, -1, -1);
-    return;
-  }
-
-  raw = raw.split(":");
+// Does check force 12
+function rawTimeToHM(input) {
+  var raw = input.split(":");
   var hour = raw[0];
   if (hour == "") 
     hour = 0;
@@ -39,14 +58,20 @@ function onTimerChange(event) {
   hour = parseInt(hour) + parseInt(hm.h);
   hour = checkHour(hour);
 
-  pushTimes(subjectID, hour, min);
+  return {hour: hour, min: min}
+}
 
-  event.target.value = checkTime(hour) + ":" + checkTime(min);
+function onTimerChange(event) {
 
-  // clearTimeout(updateTimeTimeOut);
-  // updateTime();
-  setProgress();
+  var parsedHM = rawTimeToHM(event.target.value);
+  var subjectID = event.target.parentNode.parentNode.getAttribute("subject-id");
 
+
+  pushTimes(subjectID, parsedHM.hour, parsedHM.min);
+
+  event.target.value = getDisplayTime(parsedHM.hour) + ":" + getDisplayTime(parsedHM.min);
+
+  updateDisplayProgress();
 }
 
 function pushTimes(id, h, m) {
@@ -60,14 +85,14 @@ function getElementIndex (element) {
   return Array.from(element.parentNode.children).indexOf(element);
 }
 
-function checkTime(i) {
-  
+function getDisplayTime(i) {
   if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
   return i;
 }
 
 function checkHour(i) {
-  if ((i > 12) && (force12)) {i = i % 12};
+  if ((i >= 12) && (force12)) {i = i % 12};
+  if ((!force12) && (i < 12)) {i = i + 12};
   i = parseInt(i, 10);
   if (i > 23) {
     i = 23;
@@ -99,9 +124,9 @@ function updateTime() {
   var h = today.getHours();
   var m = today.getMinutes();
   var s = today.getSeconds();
-  h = checkTime(checkHour(h));
-  m = checkTime(m);
-  s = checkTime(s);
+  h = getDisplayTime(checkHour(h));
+  m = getDisplayTime(m);
+  s = getDisplayTime(s);
 
   currentHour = parseInt(h, 10);
   currentMin = parseInt(m, 10);
@@ -111,13 +136,10 @@ function updateTime() {
 
   if (document.getElementById('main-timer-sec').innerHTML != s) {
     // console.log("Actually Changed Second");
-    setProgress();
+    updateDisplayProgress();
   }
 
   document.getElementById('main-timer-sec').innerHTML = s;
-
-  
-  
 
   updateTimeTimeOut = setTimeout(updateTime, 100);
 }
@@ -270,11 +292,16 @@ function addEventListenerToClassName(event, className, func) {
   });
 }
 
-var isFullScreen = false;
-
 /* Function to open fullscreen mode */
+
+document.onfullscreenchange = onFullScreenChange;
+
+function onFullScreenChange (ev) {
+  toggleExpandIcon();
+}
+
 function toggleFullScreen() {
-  if (isFullScreen) {
+  if (document.fullscreenElement) {
 
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -283,7 +310,6 @@ function toggleFullScreen() {
     } else if (document.msExitFullscreen) { /* IE/Edge */
       document.msExitFullscreen();
     }
-
     // resetZoom();
 
   } else {
@@ -301,15 +327,11 @@ function toggleFullScreen() {
 
     // zoomIn();
   } 
-
-  isFullScreen = !isFullScreen;
-  toggleExpandIcon();
-
 }
 
 function toggleExpandIcon() {
   var btnFullScreen = document.getElementById("btn-fullscreen")
-  if (isFullScreen) {
+  if (document.fullscreenElement) {
     btnFullScreen.setAttribute("uk-icon", "shrink");
   } else {
     btnFullScreen.setAttribute("uk-icon", "expand");
@@ -333,7 +355,7 @@ function pushNewSubject() {
 //   }
 // });
 
-function setProgress() {
+function updateDisplayProgress() {
   [].forEach.call(document.getElementsByClassName("timer"), function(el){
     var subjectID = el.parentNode.parentNode.getAttribute("subject-id");
 
@@ -343,9 +365,20 @@ function setProgress() {
 
     var selectBox = el.parentNode.children[0].children[0];
     // console.log(selectBox.selectedIndex);
-    var endInfo = title.children[2].children[selectBox.selectedIndex];
-    var endLabel = selectBox.value;
+    var endInfo = title.children[2];
 
+    if (!showExtraInfo) {
+      endInfo.innerHTML = "";
+    } else if (endInfo.innerHTML == "") {
+      endInfo.innerHTML = 'End     <span class="uk-text-normal">1: --:--</span>     <span class="uk-text-normal">2: --:--</span>';
+    }
+
+    // console.log(selectBox.selectedIndex, endInfo.children);
+    var endInfoChild = endInfo.children[selectBox.selectedIndex];
+    // console.log(endInfoChild.innerHTML);
+
+
+    var endLabel = selectBox.value;
     // console.log(endLabel);
 
     var minElapsed = 0;
@@ -381,15 +414,15 @@ function setProgress() {
 
     var offset = 6; // The 5px padding + the 1px border to the left
 
-    // Add Legends
+    // Legends
     if (subjects)
     if ((startHour[subjectID] >= 0) && (startMin[subjectID] >=0) 
       && (currentHour >= 0) && (currentMin >= 0) && (currentSec >= 0)
       && (duration >= 30)) {
       var sh = parseInt(startHour[subjectID]);
       var sm = parseInt(startMin[subjectID]);
-      var shtxt = checkTime(sh);
-      var smtxt = checkTime(sm);
+      var shtxt = getDisplayTime(sh);
+      var smtxt = getDisplayTime(sm);
       minElapsed = (currentHour - startHour[subjectID]) * 60 + currentMin - startMin[subjectID] + currentSec / 60;
 
       // console.log("Min Elapsed", minElapsed);
@@ -397,16 +430,16 @@ function setProgress() {
       var hm = checkMin(sm + reading);
       var hr = parseInt(sh) + parseInt(hm.h, 10);
       var mr = parseInt(hm.m, 10);
-      hr = checkTime(hr);
-      mr = checkTime(mr);
+      hr = getDisplayTime(hr);
+      mr = getDisplayTime(mr);
       // legendStart.innerHTML = " Start "+hr+":"+mr;
       populateLegendStart(legendStart, hr, mr);
 
       var hm = checkMin(sm + duration - 30);
       var h30 = parseInt(sh) + parseInt(hm.h, 10);
       var m30 = parseInt(hm.m, 10);
-      h30 = checkTime(h30);
-      m30 = checkTime(m30);
+      h30 = getDisplayTime(h30);
+      m30 = getDisplayTime(m30);
       // legend30.setAttribute("data-before", "30-Min "+h30+":"+m30+" ");
       // legend30.setAttribute("data-before", "30-Min ");
       // legend30.setAttribute("data-after", h30+":"+m30);
@@ -416,8 +449,8 @@ function setProgress() {
       var hm = checkMin(sm + duration - 5);
       var h5 = parseInt(sh) + parseInt(hm.h, 10);
       var m5 = parseInt(hm.m, 10);
-      h5 = checkTime(h5);
-      m5 = checkTime(m5);
+      h5 = getDisplayTime(h5);
+      m5 = getDisplayTime(m5);
 
       populateLegend5(legend5, h5, m5);
       // legend5.setAttribute("data-before", "5-Min "+h5+":"+m5+" ");
@@ -425,13 +458,13 @@ function setProgress() {
       var hm = checkMin(sm + duration);
       var hfull = parseInt(sh) + parseInt(hm.h, 10);
       var mfull = parseInt(hm.m, 10);
-      hfull = checkTime(hfull);
-      mfull = checkTime(mfull);
+      hfull = getDisplayTime(hfull);
+      mfull = getDisplayTime(mfull);
       // legendEnd.innerHTML = "End  "+hfull+":"+mfull;
 
       populateLegendEnd(legendEnd, hfull, mfull);
 
-      populateEndInfo(endInfo, hfull, mfull, endLabel);
+      populateEndInfo(endInfoChild, hfull, mfull, endLabel);
 
     } else {
       if (duration <= 30)
@@ -445,7 +478,7 @@ function setProgress() {
 
       populateLegendEnd(legendEnd, '--', '--');
 
-      populateEndInfo(endInfo, '--', '--', endLabel);
+      populateEndInfo(endInfoChild, '--', '--', endLabel);
     }
 
     // var comStyle = window.getComputedStyle(timerLegends);
@@ -527,11 +560,13 @@ function populateLegendEnd(elem, h, m) {
 }
 
 function populateEndInfo(elem, hsl, msl, label) {
-  elem.innerHTML = label+"  "+hsl+":"+msl;
+  if (elem) {
+    elem.innerHTML = label+"  "+hsl+":"+msl;
+  }
 }
 
 updateTime();
-setProgress();
+updateDisplayProgress();
 pushNewSubject();
 
 function addSubject(){
@@ -548,7 +583,7 @@ function addSubject(){
 
   // clearTimeout(updateTimeTimeOut);
   // updateTime();
-  setProgress();
+  updateDisplayProgress();
 
   // removeEventListenerFromClassName("click", "timer-legends", targetPPToggleEdit);
   // addEventListenerToClassName("click", "timer-legends", targetPPToggleEdit);
@@ -566,20 +601,20 @@ function zoomIn() {
   currentZoomPercent += 10;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
   zoomPopup();
-  setProgress();
+  updateDisplayProgress();
 }
 
 function zoomOut() {
   currentZoomPercent -= 10;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
   zoomPopup();
-  setProgress();
+  updateDisplayProgress();
 }
 
 function resetZoom() {
   currentZoomPercent = 100;
   document.getElementById("main").style.setProperty('zoom', currentZoomPercent + '%');
-  setProgress();
+  updateDisplayProgress();
 }
 
 function zoomPopup() {

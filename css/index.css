@@ -94,6 +94,10 @@ button {
   transition: height 0.2s ease;
 }
 
+.timer-legends {
+  transition: background 0.5s ease;
+}
+
 .timer-legend-end-small, .timer-legend {
   font-size: 0.9rem;
   font-weight: bold;

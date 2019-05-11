@@ -104,9 +104,10 @@
 
   <div class="btn-group uk-flex uk-flex-middle uk-padding-small uk-overlay uk-position-bottom-right uk-width-auto uk-card uk-card-hover">
     <input id="color-picker" type="color" class="gone" value="#9BE3C8">
+    <button id="btn-toggle-force12" uk-tooltip="title: Force Hour ≤12; delay: 500" class="btn num-mono" onclick="toggleForce12();">24</button>
+    <button id="btn-toggle-extra-info" uk-tooltip="title: Toggle Extra Info; delay: 500" class="btn" uk-icon="clock" onclick="toggleExtraInfo()"></button>
     <a id="btn-question" uk-icon="question" class="btn" uk-tooltip="Click On Timeline to <br> Edit Exam Duration" href="#"></a>
     <a id="btn-info" uk-icon="info" class="btn" uk-tooltip="By Painttist" href="https://github.com/painttist/exam_timer" target="_blank"></a>
-    <button id="btn-toggle-force12" uk-icon="clock" uk-tooltip="title: Force Hour ≤12; delay: 500" class="btn" onclick="toggleForce12();"></button>
     <button id="btn-zoom-out" uk-icon="minus-circle" uk-tooltip="title: Zoom Out; delay: 500" class="btn" onclick="zoomOut();"></button>
     <button id="btn-zoom-in" uk-icon="plus-circle" uk-tooltip="title: Zoom In; delay: 500" class="btn" onclick="zoomIn();"></button>
     <button id="btn-plus" uk-icon="pencil" uk-tooltip="title: Add Subject; delay: 500" class="btn" onclick="addSubject();"></button>
