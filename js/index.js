@@ -1,7 +1,7 @@
 'use strict'
 // alert("Hello World")
 
-console.log("Version 2.1");
+console.log("Version 2.2");
 
 var force12 = true;
 var btnForce12 = document.getElementById('btn-toggle-force12');
@@ -355,6 +355,8 @@ function pushNewSubject() {
 //   }
 // });
 
+const timerColors = ["#e67e22", "#2ecc71", "#3498db", "#9b59b6"];
+
 function updateDisplayProgress() {
   [].forEach.call(document.getElementsByClassName("timer"), function(el){
     var subjectID = el.parentNode.parentNode.getAttribute("subject-id");
@@ -491,7 +493,8 @@ function updateDisplayProgress() {
     // console.log(totalLegendWidth);
 
     // console.log(subjectID, "Reading", reading, "Duration", duration);
-    var legendReadingWidth = ((reading) / duration) * totalLegendWidth;
+    var legendReadingPerc = (reading) / duration;
+    var legendReadingWidth = legendReadingPerc * totalLegendWidth;
 
     if (legendReadingWidth <= 0) {
       legendReading.classList.add('gone');
@@ -503,42 +506,82 @@ function updateDisplayProgress() {
     // console.log(legendReadingWidth);
     legendReading.style.width = legendReadingWidth - offset + "px";
 
-    var legendStartWidth = ((duration - 30 - reading) / duration) * totalLegendWidth;
+    var legendStartPerc = (duration - 30 - reading) / duration;
+    var legendStartWidth = legendStartPerc * totalLegendWidth;
 
     legendStart.style.width = legendStartWidth - offset + "px";
     // cssWidthMinusPx(legendStart, 12);
 
-
-    var legend30Width = (25 / duration) * totalLegendWidth;
+    var legend30Perc = 25 / duration;
+    var legend30Width = legend30Perc * totalLegendWidth;
 
     legend30.style.width = legend30Width - offset + "px";
     // cssWidthMinusPx(legend30, 12);
 
+    // console.log(legend30Perc);
 
     legend30.style.setProperty("--tag-padding-right", (legend30Width + 5)+ "px");
 
+    // var legend5Perc = 1 - 
+    var legend5Perc = 1 - legendReadingPerc - legendStartPerc - legend30Perc;
     var legend5Width = totalLegendWidth - legendReadingWidth - legendStartWidth - legend30Width;
     legend5.style.width = legend5Width - offset + "px";
 
     legend5.style.setProperty("--tag-padding-right", (legend5Width + 5)+ "px");
 
-    var percent = minElapsed / duration * 100;
+    var percent = minElapsed / duration;
 
-    // console.log("Percent: ", percent);
-    // console.log('duration', duration);
+    // legendReadingPerc - legendStartPerc - legend30Perc - legend5Perc
 
-    var primaryColor = document.getElementById('color-picker').value;
+
+    var color1Perc = percent - legendReadingPerc;
+    var color2Perc = color1Perc - legendStartPerc;
+    var color3Perc = color2Perc - legend30Perc;
+    var color4Perc = color3Perc - legend5Perc;
+
+    var primaryColorIndex = 0;
+
+    if (color1Perc >= 0) {
+      // Change primary Color Index
+      primaryColorIndex = 1;
+    }
+
+    if (color2Perc >= 0) {
+      primaryColorIndex = 2;
+    }
+
+    if (color3Perc >= 0) {
+      primaryColorIndex = 3;
+    }
+
+    console.log("-----------------------------")
+
+    console.log(Math.floor(hundredize(color1Perc)), Math.floor(hundredize(color2Perc)),
+      Math.floor(hundredize(color3Perc)),
+      Math.floor(hundredize(color4Perc)));
+    console.log(percent);
+
+    var primaryColor = timerColors[primaryColorIndex];
     var shadowColor = ColorLuminance(primaryColor, -0.3);
 
     var bgColor = "#ddd"
 
     var shadowWidth = 0.2;
 
+    percent = hundredize(percent);
+
     timerLegends.style.backgroundImage = "linear-gradient(90deg, "
-      +primaryColor+" 0%, "+primaryColor+" "+(percent)+"%, "
-      +shadowColor+" "+(percent)+"%, "+bgColor+" "+(percent + shadowWidth)+"%, "
-      +bgColor+" "+(percent + shadowWidth)+"%, "+bgColor+" 100%)";
+      +primaryColor+" 0%, "
+      +primaryColor+" "+(percent)+"%, "
+      +shadowColor+" "+(percent)+"%, "
+      +bgColor+" "+(percent + shadowWidth)+"%, "
+      +bgColor+" "+(percent + shadowWidth)+"%, "
+      +bgColor+" 100%)";
   });
+}
+
+function hundredize(percent) {
+  return percent*100;
 }
 
 function populateLegendStart(elem, h, m) {
@@ -571,7 +614,7 @@ pushNewSubject();
 
 function addSubject(){
   var newSubjectID = subjects.length;
-  var n2html = '<div id="subject-title-'+newSubjectID+'" subject-id="'+newSubjectID+'" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex"> <input type="text" class="uk-flex-none uk-width-medium uk-input uk-card-title uk-text-bold" placeholder="Subject Name"> <div class="uk-flex-none uk-width-auto uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold"> Start  <input tabindex='+(newSubjectID+1)+' class="input input-time uk-text-normal uk-width-small uk-flex-none uk-input" type="text" placeholder="00:00"> </div><div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold"> End     <span class="uk-text-normal">--:--</span>     <span class="uk-text-normal">--:--</span></div><button class="btn-subject-delete uk-flex-none uk-flex uk-flex-middle uk-padding-small uk-padding-remove-vertical" uk-icon="minus-circle" onclick="deleteSubject(this)"></button></div><div id="subject-levels-'+newSubjectID+'" subject-id="'+newSubjectID+'" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top"> <div class="level uk-flex-middle uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-text-medium uk-flex-none uk-width-auto uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option selected>SL</option> <option>HL</option> </select> </div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-reading" class="timer-legend"></div><div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-none uk-width-auto uk-input" placeholder="60" value="60"> <div class="uk-flex-none">Reading Time (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5"> </div></div><div class="uk-width-auto uk-flex-none uk-flex uk-flex-left"> <div class="uk-text-left level-label-end level-label">End</div></div></div><div class="level uk-flex-middle uk-flex-auto uk-flex"> <div class="uk-text-medium uk-flex-none uk-width-auto uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option>SL</option> <option selected>HL</option> </select> </div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-reading" class="timer-legend"></div><div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-none uk-width-auto uk-input" placeholder="120" value="120"> <div class="uk-flex-none">Reading Time (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5"> </div></div><div class="uk-width-auto uk-flex-none uk-flex uk-flex-left"> <div class="uk-text-left level-label-end level-label">End</div></div></div></div>';
+  var n2html = '<div id="subject-title-'+newSubjectID+'" subject-id="'+newSubjectID+'" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex"> <input type="text" class="uk-flex-none uk-width-medium uk-input uk-card-title uk-text-bold" placeholder="Subject Name"> <div class="uk-flex-none uk-width-auto uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold"> Ready  <input tabindex='+(newSubjectID+1)+' class="input input-time uk-text-normal uk-width-small uk-flex-none uk-input" type="text" placeholder="00:00"> </div><div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold"> End     <span class="uk-text-normal">--:--</span>     <span class="uk-text-normal">--:--</span></div><button class="btn-subject-delete uk-flex-none uk-flex uk-flex-middle uk-padding-small uk-padding-remove-vertical" uk-icon="minus-circle" onclick="deleteSubject(this)"></button></div><div id="subject-levels-'+newSubjectID+'" subject-id="'+newSubjectID+'" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top"> <div class="level uk-flex-middle uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-text-medium uk-flex-none uk-width-auto uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option selected>SL</option> <option>HL</option> </select> </div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-reading" class="timer-legend"></div><div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-none uk-width-auto uk-input" placeholder="60" value="60"> <div class="uk-flex-none">Reading Time (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5"> </div></div><div class="uk-width-auto uk-flex-none uk-flex uk-flex-left"> <div class="uk-text-left level-label-end level-label">End</div></div></div><div class="level uk-flex-middle uk-flex-auto uk-flex"> <div class="uk-text-medium uk-flex-none uk-width-auto uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option>SL</option> <option selected>HL</option> </select> </div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-reading" class="timer-legend"></div><div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-none uk-width-auto uk-input" placeholder="120" value="120"> <div class="uk-flex-none">Reading Time (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5"> </div></div><div class="uk-width-auto uk-flex-none uk-flex uk-flex-left"> <div class="uk-text-left level-label-end level-label">End</div></div></div></div>';
   // var nhtml = '<div subject-id="'+newSubjectID+'" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex"> <input type="text" class="uk-flex-none uk-width-auto uk-input uk-card-title uk-text-bold" placeholder="Subject Name"> <div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-large uk-text-bold"> Starts <input tabindex='+(newSubjectID+1)+' class="input input-time uk-width-auto uk-flex-none uk-input" type="text" placeholder="00:00"> </div></div><div subject-id="'+newSubjectID+'" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top"> <div class="level uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option selected>Standard Level</option> <option>Higher Level</option> </select> <div class="uk-text-left uk-input level-label">End</div></div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-reading" class="timer-legend"></div><div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-none uk-width-auto uk-input" placeholder="60" value="60"> <div class="uk-flex-none">Reading Time (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5"> </div></div></div><div class="level uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option>Standard Level</option> <option selected>Higher Level</option> </select> <div class="uk-text-left uk-input level-label">End</div></div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-reading" class="timer-legend"></div><div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-none uk-width-auto uk-input" placeholder="120" value="120"> <div class="uk-flex-none">Reading Time (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="5" value="5"> </div></div></div></div>';
   // var html = '<div subject-id="'+newSubjectID+'" class="subject uk-flex-auto uk-flex uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top uk-flex"> <input type="text" class="uk-flex-none uk-width-auto uk-input uk-card-title uk-text-bold" placeholder="Subject Name"> <div class="uk-flex-1 uk-flex uk-flex-middle uk-input uk-text-medium uk-text-bold"> Starts <input tabindex='+(newSubjectID+1)+' class="input input-time uk-width-auto uk-flex-none uk-input" type="text" placeholder="00:00"> </div></div><div subject-id="'+newSubjectID+'" class="levels-card uk-card uk-card-body uk-card-xsmall uk-card-default uk-margin-small-top"> <div class="level uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option selected>Standard Level</option> <option>Higher Level</option> </select> <div class="uk-text-left uk-input level-label">End</div></div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="60" value="60"> </div></div></div><div class="level uk-flex-auto uk-flex uk-margin-small-bottom"> <div class="uk-width-expand uk-flex-none uk-width-small uk-flex uk-flex-left uk-flex-column"> <select class="uk-input uk-text-bold level-label"> <option>Standard Level</option> <option selected>Higher Level</option> </select> <div class="uk-text-left uk-input level-label">End</div></div><div class="timer uk-width-expand uk-flex-1 uk-flex uk-flex-wrap uk-flex-middle"> <div class="uk-width-1-1 timer-legends uk-width-expand uk-flex uk-flex-middle uk-text"> <div id="timer-legend-start" class="timer-legend"> Start 00:00</div><div id="timer-legend-30" class="timer-legend"> </div><div id="timer-legend-5" class="timer-legend"> </div></div><div id="timer-duration" class="uk-width-1-1 uk-flex uk-flex-baseline"> <div class="uk-flex-none">Duration (min):</div><input type="text" class="input-duration uk-flex-1 uk-input" placeholder="120" value="120"> </div></div></div></div>';
   document.getElementById("timer-container").insertAdjacentHTML('beforeend', n2html);
